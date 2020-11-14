@@ -9,15 +9,15 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def front():
-    return render_template(r"src\webapp\WEB-INF\front.html")
+    return render_template(r"front.html")
 
-@app.route('/SignUp')
+@app.route('/new-user')
 def sign_up ():
-    return 'signup'
+    return render_template(r"new-user.html")
 
-@app.route('/Login')
+@app.route('/customer-login')
 def login ():
-    return 'login'
+    return render_template(r"customer-login.html")
 
 @app.errorhandler(505)
 def internal_error(error):

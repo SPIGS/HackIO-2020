@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/front.css') }}" media="screen"/>
+        <title>Oasis Login</title>
+    </head>
+    <header class="brandheader"><h1>OASIS</h1></header>
+    <body>
+        <img src="{{ url_for('static', filename='res/logo.png') }}" alt="Oasis" class="center">
+        <div class="buttons">
+            <a href="customer-login" class="button">Customer</a>
+            <a href="customer-login" class="button">Organizer</a>
+        </div>
+        <p class="sign-up-link">
+            <a href="new-user">Sign Up</a>
+        </p>
+    </body>
+</html>
