@@ -1,17 +1,50 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/front.css') }}" media="screen"/>
-        <title>Oasis Login</title>
-    </head>
-    <header class="brandheader"><h1>OASIS</h1></header>
-    <body>
-        <img src="{{ url_for('static', filename='res/logo.png') }}" alt="Oasis" class="center">
-        <div class="buttons">
-            <a href="customer-login" class="button">Customer</a>
-            <a href="customer-login" class="button">Organizer</a>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/front.css') }}" media="screen" />
+    <title>Oasis Login</title>
+</head>
+<header>
+    <div class="logo">
+        <img class="logo" src="{{ url_for('static', filename='res/logo.png') }}" />
+    </div>
+    <div class="nav">
+        <div class="nav_bar_links">
+            <div class="name">
+                <h1 class="name">OASIS</h1>
+            </div>
+            <div class="login">
+                <a href="customer-login" class="login_button">Log In</a>
+            </div>
+            <div class="signup">
+                <a href="new-user" class="signup_button">Sign Up</a>
+            </div>
         </div>
-        <p class="sign-up-link">
-            <a href="new-user">Sign Up</a>
-        </p>
-    </body>
+    </div>
+</header>
+
+<body>
+    <div id="showcase">
+        <div class="scrollpanel">
+            <div class="scrollitem" id="section1">
+                <img src="{{ url_for('static', filename='res/front.jpg') }}" alt="Woman">
+            </div>
+            <div class="scrollitem" id="section2">
+                <img src="{{ url_for('static', filename='res/front2.jpg') }}" alt="Produce">
+            </div>
+            <div class="scrollitem" id="section3">
+                <img src="{{ url_for('static', filename='res/front3.jpg') }}" alt="Delivery">
+            </div>
+        </div>
+        <div class="showcasebuttons">
+            <div class="scrollbuttons">
+                <a href="#section1" class="scrollbutton">•</a>
+                <a href="#section2" class="scrollbutton">•</a>
+                <a href="#section3" class="scrollbutton">•</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
 </html>
