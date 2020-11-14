@@ -8,7 +8,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS userdata (email text PRIMARY KEY not nul
 cur.execute("INSERT INTO userdata (email, password, firstName, lastName, userId) VALUES ('test@email.com', '12345', 'Dio', 'Brando', 1)")
 cur.execute("SELECT * FROM userdata")
 message = str(cur.fetchone())
-cur.commit()
+conn.commit()
 
 @app.route('/')
 def hello_world():
