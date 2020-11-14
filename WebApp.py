@@ -1,17 +1,31 @@
-from flask import Flask
+from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
 import os, psycopg2
+
 app = Flask(__name__)
-DATABASE_URL = os.environ['DATABASE_URL']
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-cur = conn.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS userdata (email text PRIMARY KEY not null, password text not null, firstName text not null, lastName text not null, userId int not null)")
-cur.execute("SELECT * FROM userdata")
-message = str(cur.fetchone())
-conn.commit()
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+db = SQLAlchemy(app)
 
 @app.route('/')
-def hello_world():
-    return message
+def front():
+    return render_template(r"src\webapp\WEB-INF\front.html")
+
+@app.route('/SignUp')
+def sign_up ():
+    return 'signup'
+
+@app.route('/Login')
+def login ():
+    return 'login'
+
+@app.errorhandler(505)
+def internal_error(error):
+    return "500 error"
+
+@app.errorhandler(404)
+def not_found(error):
+    return "404 error", 404
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5000, debug=True)
