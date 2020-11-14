@@ -44,7 +44,8 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 25%;
+  max-width: 25%;
+  max-height: 100%;
 }
 
 .buttons {
@@ -53,5 +54,6 @@ body {
   align-items: baseline;
 }
 
-View Compiled
-
+.sign-up-link {
+  text-align: center;
+}
