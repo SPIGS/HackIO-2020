@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 import os, psycopg2
@@ -11,13 +11,17 @@ db = SQLAlchemy(app)
 def front():
     return render_template(r"front.html")
 
-@app.route('/new-user')
-def sign_up ():
+@app.route('/new-user/')
+def sign_up():
     return render_template(r"new-user.html")
 
-@app.route('/customer-login')
-def login ():
+@app.route('/customer-login/', methods=['GET', 'POST'])
+def get_login_page():
     return render_template(r"customer-login.html")
+
+@app.route('/login/', methods=['POST'])
+def handle_login():
+    return request.form
 
 @app.errorhandler(505)
 def internal_error(error):
