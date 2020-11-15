@@ -1,54 +1,55 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/order.css') }}" media="screen" />
-        <title>Oasis</title>
-    </head>
-    <header>
-        <div class="logo">
-            <img class="logo-img" src="{{ url_for('static', filename='res/logo.png') }}" />
-        </div>
-        <div class="nav">
-            <div class="nav_bar_links">
-                <div class="name">
-                    <h1 class="name">OASIS</h1>
-                </div>
-                <a href="../home" class="home">
-                    <div class="home_button">
-                        Home
-                    </div>
-                </a>
-                <a href="#" class="tracker">
-                    <div class="tracker_button">
-                        Track
-                    </div>
-                </a>
-                <a href="#" class="payment">
-                    <div class="payment_button">
-                        Payment
-                    </div>
-                </a>
-                <a href="#" class="profile">
-                    <div class="profile_button">
-                        Profile
-                    </div>
-                </a>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/order.css') }}" media="screen" />
+    <title>Oasis</title>
+</head>
+<header>
+    <div class="logo">
+        <img class="logo-img" src="{{ url_for('static', filename='res/logo.png') }}" />
+    </div>
+    <div class="nav">
+        <div class="nav_bar_links">
+            <div class="name">
+                <h1 class="name">OASIS</h1>
             </div>
-        </div>
-    </header>
-    
-    <body>
-        <form action="/place-order/" method="POST">
-            {% for item in items %}
-                <div class="item-panel">
-                    <div class="item-name">{{item.name}}</div>
-                    <div>${{item.price}}</div>
-                    <div>Stock: {{item.stock}}</div>
-                    {% if item.stock != 0 %}
-                        <input type="number" name="{{item.name}}-quantity" class="cart-button" max="{{item.stock}}">
-                    {% endif %}
+            <a href="../home" class="home">
+                <div class="home_button">
+                    Home
                 </div>
-            {% endfor %}
-            <input type="submit" class="submit-button" value="Submit Order">
-        </form>
-    </body>
+            </a>
+            <a href="#" class="tracker">
+                <div class="tracker_button">
+                    Track
+                </div>
+            </a>
+            <a href="#" class="payment">
+                <div class="payment_button">
+                    Payment
+                </div>
+            </a>
+            <a href="#" class="profile">
+                <div class="profile_button">
+                    Profile
+                </div>
+            </a>
+        </div>
+    </div>
+</header>
+
+<body>
+    <form action="/place-order/" method="POST">
+        {% for item in items %}
+        <div class="item-panel">
+            <div class="item-name">{{item.name}}</div>
+            <div>${{item.price}}</div>
+            <div>Stock: {{item.stock}}</div>
+            {% if item.stock != 0 %}
+            <input type="number" name="{{item.name}}-quantity" class="cart-button" max="{{item.stock}}"> {% endif %}
+        </div>
+        {% endfor %}
+        <input type="submit" class="submit-button" value="Continue to Payment">
+    </form>
+</body>
+
 </html>

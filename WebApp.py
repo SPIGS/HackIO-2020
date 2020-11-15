@@ -4,11 +4,11 @@ from sqlalchemy.sql import text
 import os, hashlib, uuid
 
 app = Flask(__name__)
-domain = '127.0.0.1'
-#domain = None
+#domain = '127.0.0.1'
+domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -31,11 +31,13 @@ class Order (db.Model):
     user_id = db.Column(db.Integer)
     zip_code = db.Column(db.Integer)
     items = db.relationship('Item', backref='order')
+    paid = db.Column(db.Boolean)
 
 class Item (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
-    item_name = db.Column(db.String(50))
+    name = db.Column(db.String(50))
+    price = db.Column(db.Numeric(10, 2))
     qty = db.Column(db.Integer)
 
 class ListItem:
@@ -43,6 +45,12 @@ class ListItem:
         self.name = name
         self.stock =  stock
         self.price = str(format(price,'.2f'))
+
+class OrderItem:
+    def __init__(self, name, price, qty):
+        self.name = name
+        self.price = price
+        self.qty = qty
 
 items = [ListItem('Apples', 1000, 1.00),
         ListItem('Beef', 500, 3.00),
@@ -84,6 +92,7 @@ def get_home_page():
 
 @app.route('/order/')
 def get_order_page():
+
     return render_template(r"order.html", items=items)
 
 @app.route('/tracker/')
@@ -92,18 +101,124 @@ def get_tracker_page():
 
 @app.route('/payment/')
 def get_payment_page():
-    return render_template(r"payment.html")
+    login_cookie = request.cookies.get('UserLogin')
+    if login_cookie is not None:
+
+        id_from_cookie, email_from_cookie = login_cookie.split(':')
+        user_data = User.query.filter_by(email=email_from_cookie).first()
+        id_from_db = user_data.id
+        
+        user_order_list = Order.query.filter_by(user_id=id_from_db).first()
+        if user_order_list is not None:
+            #display order info
+            order_items = user_order_list.items
+            items = []
+            total = 0.00
+            for item in order_items:
+                items.append(OrderItem(item.name, item.price, item.qty))
+                total = "{:10.2f}".format(float(item.price) * int(item.qty))
+            
+            return render_template(r"payment.html", items=items, total=total)
+        else:
+            return redirect("/order/")
+
+    else:
+        return redirect("/customer-login/")
 
 @app.route('/profile/')
 def get_profile_page():
     return render_template(r"profile.html")
 
-@app.route('/process-order/')
-def process_order():
+@app.route('/place-order/', methods=['POST'])
+def place_order():
+    login_cookie = request.cookies.get('UserLogin')
+
+    if login_cookie is not None:
+
+        id_from_cookie, email_from_cookie = login_cookie.split(':')
+        user_data = User.query.filter_by(email=email_from_cookie).first()
+        id_from_db = user_data.id
+        zip_from_db = user_data.zip_code
+
+        user_order_list = Order.query.filter_by(user_id=id_from_db).first()
+        if user_order_list is not None:
+            #append order
+            try:
+                qty_apples = request.form['Apples-quantity']
+                user_order_list.items[0].qty += int(qty_apples)
+            except:
+                    print(" apples out of stock; cant append")
+
+            try:
+                qty_beef = request.form['Beef-quantity']
+                user_order_list.items[1].qty += int(qty_beef)
+            except:
+                print(" beef out of stock; cant append")
+
+            try:
+                qty_catfd = request.form['Cat Food-quantity']
+                user_order_list.items[2].qty += int(qty_catfd)
+            except:
+                print(" cat food out of stock; cant append")
+
+            try:
+                qty_deepdish = request.form['Deep Dish-quantity']
+                user_order_list.items[3].qty += int(qty_deepdish)
+            except:
+                print(" deepdish out of stock; cant append")
+
+            db.session.commit()
+        else:
+            #make new order
+            item_list = []
+            apples = None
+            beef = None
+            catfood = None
+            deepdish = None
+
+            try:
+                qty_apples = request.form['Apples-quantity']
+                apples = Item(name="Apples", qty=qty_apples, price=1.00)
+                item_list.append(apples)
+                db.session.add(apples)
+            except:
+                print(" apples out of stock")
+            
+            try:
+                qty_beef = request.form['Beef-quantity']
+                beef = Item(name="Beef", qty=qty_beef,price=3.00)
+                item_list.append(beef)
+                db.session.add(beef)
+            except:
+                print(" beef out of stock")
+
+            try:
+                qty_catfd = request.form['Cat Food-quantity']
+                cat_food = Item(name="Cat Food", qty=qty_catfd, price=5.00)
+                item_list.append(cat_food)
+                db.session.add(cat_food)
+            except:
+                print(" cat food out of stock")
+
+            try:
+                qty_deepdish = request.form['Deep Dish-quantity']
+                deepdish = Item(name="Deep Dish", qty=qty_deepdish, price=10.00)
+                item_list.append(deepdish)
+                db.session.add(deepdish)
+            except:
+                print(" deepdish out of stock")
+
+            order = Order(user_id=id_from_db,
+                          zip_code=zip_from_db, items=item_list, paid=False)
+            db.session.add(order)
+            db.session.commit()
+    else:
+        return redirect("/customer-login/")
+
     # treat list relationship as python list
     # a = Address(email='foo@bar.com')
     # p = Person(name='foo', addresses=[a])
-    return 'Order submitted!'
+    return redirect("/payment/")
 
 @app.route('/login/', methods=['POST'])
 def handle_login():

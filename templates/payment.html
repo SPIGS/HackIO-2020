@@ -1,41 +1,60 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/payment.css') }}" media="screen" />
-        <title>Oasis</title>
-    </head>
-    <header>
-        <div class="logo">
-            <img class="logo-img" src="{{ url_for('static', filename='res/logo.png') }}" />
-        </div>
-        <div class="nav">
-            <div class="nav_bar_links">
-                <div class="name">
-                    <h1 class="name">OASIS</h1>
-                </div>
-                <a href="../home" class="home">
-                    <div class="home_button">
-                        Home
-                    </div>
-                </a>
-                <a href="../order" class="order">
-                    <div class="order_button">
-                        Order
-                    </div>
-                </a>
-                <a href="../tracker" class="tracker">
-                    <div class="tracker_button">
-                        Track
-                    </div>
-                </a>
-                <a href="../profile" class="profile">
-                    <div class="profile_button">
-                        Profile
-                    </div>
-                </a>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/payment.css') }}" media="screen" />
+    <title>Oasis</title>
+</head>
+<header>
+    <div class="logo">
+        <img class="logo-img" src="{{ url_for('static', filename='res/logo.png') }}" />
+    </div>
+    <div class="nav">
+        <div class="nav_bar_links">
+            <div class="name">
+                <h1 class="name">OASIS</h1>
             </div>
+            <a href="../home" class="home">
+                <div class="home_button">
+                    Home
+                </div>
+            </a>
+            <a href="../order" class="order">
+                <div class="order_button">
+                    Order
+                </div>
+            </a>
+            <a href="../tracker" class="tracker">
+                <div class="tracker_button">
+                    Track
+                </div>
+            </a>
+            <a href="../profile" class="profile">
+                <div class="profile_button">
+                    Profile
+                </div>
+            </a>
         </div>
-    </header>
-    
-    <body>
-    </body>
+    </div>
+</header>
+
+<body>
+    <form action="/place-order/" method="POST">
+        {% for item in items %}
+        <div class="item-panel">
+            <div class="item-name">{{item.name}}</div>
+            <div>${{item.price}}</div>
+            <div>{{item.qty}}</div>
+        </div>
+        {% endfor %}
+        <div class="item-panel">
+            <div>${{total}}</div>
+        </div>
+        <div class="item-panel">
+            <div class="item-name">Enter Payment Info</div>
+            <input type="text" name="creditcard" class="creditcard">
+        </div>
+        <input type="submit" class="submit-button" value="Submit Order">
+    </form>
+</body>
+
 </html>
