@@ -10,9 +10,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
+db.create_all()
 
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50))
     organizer = db.Column(db.Boolean)
@@ -22,6 +24,7 @@ class User(db.Model):
     zip_code = db.Column(db.Integer)
 
 class User_Auth(db.Model):
+    __tablename__ = 'user_auth'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50))
     hashed_password = db.Column(db.String(200)) #NOTE: THIS IS NOT SECURE!!!! THIS IS ONLY INTENDED FOR PROTOTYPING SINCE THIS IS A HACKATHON!!!!
@@ -35,6 +38,7 @@ class Order (db.Model):
     paid = db.Column(db.Boolean)
 
 class Item (db.Model):
+    __tablename__ = 'item'
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     name = db.Column(db.String(50))
@@ -94,8 +98,11 @@ def get_home_page():
 
 @app.route('/order/')
 def get_order_page():
-
-    return render_template(r"order.html", items=items)
+    login_cookie = request.cookies.get('UserLogin')
+    if login_cookie is not None:
+        return render_template(r"order.html", items=items)
+    else:
+        return redirect("/customer-login/")
 
 @app.route('/tracker/')
 def get_tracker_page():
@@ -118,9 +125,9 @@ def get_payment_page():
             total = 0.00
             for item in order_items:
                 items.append(OrderItem(item.name, item.price, item.qty))
-                total = "{:10.2f}".format(float(item.price) * int(item.qty))
+                total += float(item.price) * int(item.qty)
             
-            return render_template(r"payment.html", items=items, total=total)
+            return render_template(r"payment.html", items=items, total="{:10.2f}".format(total))
         else:
             return redirect("/order/")
 
@@ -289,5 +296,4 @@ def check_password(hashed_password, user_password):
     return password + ':' + salt == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest() + ':' + salt
 
 if __name__ == '__main__':
-    db.create_all()
-    app.run(port=5000, debug=True)
+    app.run(port=5000)
