@@ -38,6 +38,18 @@ class Item (db.Model):
     item_name = db.Column(db.String(50))
     qty = db.Column(db.Integer)
 
+class ListItem:
+    def __init__(self, name, stock, price):
+        self.name = name
+        self.stock =  stock
+        self.price = str(format(price,'.2f'))
+
+items = [ListItem('Apples', 1000, 1.00),
+        ListItem('Beef', 500, 3.00),
+        ListItem('Cat Food',130, 5.00),
+        ListItem('Deep Dish', 0, 10.00)]
+
+
 @app.route('/')
 def front():
     return render_template(r"front.html")
@@ -72,7 +84,7 @@ def get_home_page():
 
 @app.route('/order/')
 def get_order_page():
-    return render_template(r"order.html")
+    return render_template(r"order.html", items=items)
 
 @app.route('/login/', methods=['POST'])
 def handle_login():

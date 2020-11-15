@@ -37,5 +37,16 @@
     </header>
     
     <body>
+        {% for item in items %}
+            <div class="item-panel">
+                <div class="item-name">{{item.name}}</div>
+                <div>${{item.price}}</div>
+                <div>Stock: {{item.stock}}</div>
+                {% if item.stock != 0 %}
+                    <input type="submit" class="cart-button" value="Add To Cart">
+                {% endif %}
+            </div>
+        {% endfor %}
+        <input type="submit" class="submit-button" value="Submit Order">
     </body>
 </html>

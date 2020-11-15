@@ -69,3 +69,54 @@ body {
 .profile:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
+
+.item-panel {
+    background-color: white;
+    width: 100%;
+    height: 150px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 15px;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    align-content: center;
+    color: #00697c;
+    font-size: large;
+}
+
+.cart-button {
+    background-color: #00697c;
+    border: none;
+    text-decoration: none;
+    color: white;
+    align-content: center;
+    cursor: pointer;
+    font-family: 'Rubik', sans-serif;
+    margin-right: 10px;
+    height: 200%;
+    border-radius: 5px;
+    font-size: large;
+}
+
+.cart-button:hover,
+.submit-button:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.item-name {
+    margin-left: 7px;
+}
+
+.submit-button {
+    background-color: #00697c;
+    border: none;
+    text-decoration: none;
+    color: white;
+    align-content: center;
+    cursor: pointer;
+    font-family: 'Rubik', sans-serif;
+    border-radius: 5px;
+    font-size: large;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
