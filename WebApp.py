@@ -5,8 +5,13 @@ import os, hashlib, uuid
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+<<<<<<< Updated upstream
 #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5433/postgres'
+=======
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
+>>>>>>> Stashed changes
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -34,6 +39,10 @@ def sign_up():
 @app.route('/customer-login/')
 def get_login_page():
     return render_template(r"customer-login.html")
+
+@app.route('/home/')
+def get_home_page():
+    return render_template(r"home.html")
 
 @app.route('/login/', methods=['POST'])
 def handle_login():
