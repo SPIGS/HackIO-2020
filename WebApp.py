@@ -4,11 +4,11 @@ from sqlalchemy.sql import text
 import os, hashlib, uuid
 
 app = Flask(__name__)
-domain = '127.0.0.1'
-#domain = None
+#domain = '127.0.0.1'
+domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 db.create_all()
 
