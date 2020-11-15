@@ -7,8 +7,8 @@ app = Flask(__name__)
 domain = '127.0.0.1'
 #domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -39,7 +39,23 @@ def get_login_page():
 
 @app.route('/home/')
 def get_home_page():
-    return render_template(r"home.html")
+    login_cookie = request.cookies.get('UserLogin')
+
+    if login_cookie is not None:
+        id_from_cookie, email_from_cookie = login_cookie.split(':')
+        user_data = User.query.filter_by(email=email_from_cookie).first()
+        id_from_db = user_data.id
+
+        if str(id_from_db) == str(id_from_cookie):
+            res = make_response(render_template(r'home.html'))
+            return res
+        else:
+            res = make_response(redirect('/customer-login/'))
+            return res
+    else:
+        # there is no userlogin cookie so they can't access this page
+        res = make_response(redirect('/customer-login/'))
+        return res
 
 @app.route('/login/', methods=['POST'])
 def handle_login():
@@ -47,8 +63,14 @@ def handle_login():
     password_form = request.form['password']
     user_auth = User_Auth.query.filter_by(email=user_email).first()
     is_correct_password = check_password(user_auth.hashed_password, password_form)
+    
     if is_correct_password:
-        res = make_response('Correct password login should happen')
+        user_data = User.query.filter_by(email=user_email).first()
+        user_id = user_data.id
+
+        res = make_response(redirect('/home/'))
+        res.set_cookie('UserLogin', str(user_id) + ':' +
+                       str(user_email), domain=domain, secure=True)
         return res
     else:
         res = make_response('Incorrect password')
@@ -57,20 +79,26 @@ def handle_login():
 @app.route('/sign-up/', methods=['POST'])
 def handle_sign_up():
     if request.form['password'] == request.form['confirmation']:
-        user = User(email=request.form['email'], organizer=False, admin=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
+        user_email = request.form['email']
+        
+        user = User(email=user_email, organizer=False, admin=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
         user_auth = User_Auth(email=request.form['email'], hashed_password=get_hashed_password(request.form['password']))
         db.session.add(user)
         db.session.add(user_auth)
         db.session.commit()
+        
+        user_id = User.query.filter_by(email=user_email).first()
 
-        return redirect('/home/')
+        res = make_response(redirect('/home/'))
+        res.set_cookie('UserLogin', str(user_id.id) + ':' + str(user_email), domain=domain, secure=True)
+        return res
     else:
         return render_template(r"new-user.html",mismatch=True)
 
 @app.route('/user/<email>/')
 def get_user(email):
     user = User.query.filter_by(email=email).first()
-    login = request.cookies.get('Login')
+    login = request.cookies.get('UserLogin')
     return f'<ul><li>Email: { login }</li></ul>'
 
 @app.errorhandler(505)
