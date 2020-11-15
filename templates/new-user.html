@@ -5,16 +5,21 @@
     </head>
     <header class="brandheader"><h1>OASIS</h1></header>
     <body>
-        <img src="{{ url_for('static', filename='res/logo.png') }}" alt="Oasis" class="center-small">
+      <img src="{{ url_for('static', filename='res/logo.png') }}" alt="Oasis" class="center-small">
+      <form action="/sign-up/" method="POST">
         <div class="Wrapper">
-        <div class="Input">
-          <input type="text" id="email" class="Input-text" placeholder="Enter your email">
-          <input type="password" id="password" class="Input-text" placeholder="Enter a new password">
-          <input type="password" id="confirmation" class="Input-text" placeholder="Confirm your password">
+          <div class="Input">
+            <input type="text" id="email" name="email" class="Input-text" placeholder="Enter your email" required>
+            <input type="text" id="address" name="address" class="Input-text" placeholder="Enter your address" required>
+            <input type="text" id="state" name="state" class="Input-text" placeholder="Enter your state" required>
+            <input type="text" id="ZIP" name="ZIP" class="Input-text" placeholder="Enter your ZIP code" required>
+            <input type="password" id="password" name="password" class="Input-text" placeholder="Enter a new password" required>
+            <input type="password" id="confirmation" name="confirmation" class="Input-text" placeholder="Confirm your password" required>
+          </div>
         </div>
-      </div>
-      <div class="submit">
-        <a href="#" class="submit-button">Submit</a>
-      </div>
+        <div class="submit">
+          <input type="submit" href="#" class="submit-button" value="Submit">
+        </div>
+      </form>
     </body>
 </html>
