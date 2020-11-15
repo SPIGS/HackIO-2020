@@ -85,17 +85,19 @@ body {
 }
 
 .cart-button {
-    background-color: #00697c;
-    border: none;
-    text-decoration: none;
-    color: white;
-    align-content: center;
-    cursor: pointer;
+    background-color: white;
+    border: #00697c;
+    border-width: 10px;
+    color: black;
+    cursor: text;
     font-family: 'Rubik', sans-serif;
     margin-right: 10px;
     height: 200%;
     border-radius: 5px;
     font-size: large;
+    width: 25%;
+    text-align: right;
+    padding: 5px;
 }
 
 .cart-button:hover,
