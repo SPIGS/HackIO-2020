@@ -39,6 +39,10 @@ def get_login_page():
 def get_home_page():
     return render_template(r"home.html")
 
+@app.route('/order/')
+def get_order_page():
+    return render_template(r"order.html")
+
 @app.route('/login/', methods=['POST'])
 def handle_login():
     return request.form
