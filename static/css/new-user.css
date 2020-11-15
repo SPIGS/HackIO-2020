@@ -19,12 +19,12 @@ body {
     background: #CCD1D9;
     }
 
-.center {
+.center-small {
     display: block;
     margin-left: auto;
     margin-right: auto;
     max-width: 25%;
-    max-height: 100%;
+    max-height: 25%;
     }
 
 :root {
@@ -34,9 +34,7 @@ body {
     --gutterLg: 1.6rem;
     --gutterXl: 2.4rem;
     --gutterXx: 7.2rem;
-    --colorPrimary400: #7e57c2;
-    --colorPrimary600: #5e35b1;
-    --colorPrimary800: #4527a0;
+    --colorPrimary: #00697c;
     --fontSizeSm: 0.8rem;
     --fontSizeMd: 1.2rem;
     --fontSizeLg: 1.6rem;
@@ -48,10 +46,10 @@ body {
     --transitionTF: cubic-bezier(0.645, 0.045, 0.355, 1);
     
     /* floated labels */
-    --inputPaddingV: var(--gutterMd);
-    --inputPaddingH: var(--gutterLg);
-    --inputFontSize: var(--fontSizeLg);
-    --inputLineHeight: var(--lineHeightMd);
+    --inputPaddingV: var(--gutterSm);
+    --inputPaddingH: var(--gutterMd);
+    --inputFontSize: var(--fontSizeMd);
+    --inputLineHeight: var(--lineHeightSm);
     --labelScaleFactor: 0.8;
     --labelDefaultPosY: 50%;
     --labelTransformedPosY: calc(
@@ -70,10 +68,13 @@ body {
 }
 
 .Wrapper {
+    width: 100%;
+    min-height: 80px;
     display: grid;
     margin-top: 20px;
     margin-left: auto;
-    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
 }
 
 .Title {
@@ -84,16 +85,17 @@ body {
     font-weight: 400;
     line-height: var(--lineHeightSm);
     text-align: center;
-    text-shadow: -0.1rem 0.1rem 0.2rem var(--colorPrimary800);
+    text-shadow: -0.1rem 0.1rem 0.2rem var(--colorPrimary);
 }
 
 .Input {
-    position: absolute;
+    position: relative;
 }
 
 .Input-text {
     display: block;
     margin: 0;
+    margin-top: 12px;
     padding: var(--inputPaddingV) var(--inputPaddingH);
     color: inherit;
     width: 100%;
@@ -112,7 +114,7 @@ body {
 
 .Input-text:focus {
     outline: none;
-    box-shadow: 0.2rem 0.8rem 1.6rem var(--colorPrimary600);
+    box-shadow: 0.2rem 0.8rem 1.6rem var(--colorPrimary);
 }
 
 .Input-label {
@@ -156,3 +158,29 @@ body {
     z-index 0ms;
 }
 
+.submit {
+    margin-right: auto;
+    margin-left: auto;
+    padding: 16px 42px;
+    box-shadow: 0px 0px 12px -2px rgba(0, 0, 0, 0.5);
+    line-height: 1.25;
+    background: #a19d84;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    position: relative;
+    transition: background-color .6s ease;
+    overflow: hidden;
+    align-self: center;
+    margin-right: 5px;
+    margin-left: 5px;
+    width: 50%;
+}
+
+.submit-button {
+    text-decoration: none;
+    color: white;
+    align-content: center;
+}
