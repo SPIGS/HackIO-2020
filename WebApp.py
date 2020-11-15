@@ -15,7 +15,7 @@ def front():
 def sign_up():
     return render_template(r"new-user.html")
 
-@app.route('/customer-login/', methods=['GET', 'POST'])
+@app.route('/customer-login/')
 def get_login_page():
     return render_template(r"customer-login.html")
 
