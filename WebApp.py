@@ -85,6 +85,12 @@ def handle_sign_up():
     if request.form['password'] == request.form['confirmation']:
         user_email = request.form['email']
         
+        users_in_db = User.query.filter_by(email=user_email).first()
+
+        # dont allow duplicate user emails
+        if users_in_db is not None:
+            return render_template(r"new-user.html", mismatch=True)
+
         user = User(email=user_email, organizer=False, admin=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
         user_auth = User_Auth(email=request.form['email'], hashed_password=get_hashed_password(request.form['password']))
         db.session.add(user)
