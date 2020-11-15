@@ -4,11 +4,11 @@ from sqlalchemy.sql import text
 import os, hashlib, uuid
 
 app = Flask(__name__)
-#domain = '127.0.0.1'
-domain = None
+domain = '127.0.0.1'
+#domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 db.create_all()
 
@@ -97,8 +97,11 @@ def get_home_page():
 
 @app.route('/order/')
 def get_order_page():
-
-    return render_template(r"order.html", items=items)
+    login_cookie = request.cookies.get('UserLogin')
+    if login_cookie is not None:
+        return render_template(r"order.html", items=items)
+    else:
+        return redirect("/customer-login/")
 
 @app.route('/tracker/')
 def get_tracker_page():
@@ -292,6 +295,4 @@ def check_password(hashed_password, user_password):
     return password + ':' + salt == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest() + ':' + salt
 
 if __name__ == '__main__':
-    db.delete_all()
-    db.create_all()
     app.run(port=5000)
