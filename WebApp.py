@@ -287,6 +287,5 @@ def check_password(hashed_password, user_password):
     return password + ':' + salt == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest() + ':' + salt
 
 if __name__ == '__main__':
-    db.drop_all()
     db.create_all()
     app.run(port=5000)
