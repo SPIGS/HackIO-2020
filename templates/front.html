@@ -30,14 +30,23 @@
 <body>
     <div id="showcase">
         <div class="scrollpanel">
-            <div class="scrollitem" id="section1">
-                <img src="{{ url_for('static', filename='res/front.jpg') }}" alt="Woman">
+            <div class="scroll_item_container" id="section1">
+                <div class="scroll_item_image_container">
+                    <img src="{{ url_for('static', filename='res/front1.jpg') }}" alt="Delivery">
+                </div>
+                <div class="scroll_item_text_container">Fresh produce for all.</div>
             </div>
-            <div class="scrollitem" id="section2">
-                <img src="{{ url_for('static', filename='res/front2.jpg') }}" alt="Produce">
+            <div class="scroll_item_container" id="section2">
+                <div class="scroll_item_image_container">
+                    <img src="{{ url_for('static', filename='res/front2.jpg') }}" alt="Delivery">
+                </div>
+                <div class="scroll_item_text_container">Packaged with care.</div>
             </div>
-            <div class="scrollitem" id="section3">
-                <img src="{{ url_for('static', filename='res/front3.jpg') }}" alt="Delivery">
+            <div class="scroll_item_container" id="section3">
+                <div class="scroll_item_image_container">
+                    <img src="{{ url_for('static', filename='res/front3.jpg') }}" alt="Delivery">
+                </div>
+                <div class="scroll_item_text_container">Delivered for you.</div>
             </div>
         </div>
         <div class="showcasebuttons">
