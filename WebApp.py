@@ -6,7 +6,7 @@ import os, hashlib, uuid
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5433/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -29,7 +29,7 @@ def front():
 
 @app.route('/new-user/')
 def sign_up():
-    return render_template(r"new-user.html")
+    return render_template(r"new-user.html",mismatch=False)
 
 @app.route('/customer-login/')
 def get_login_page():
@@ -54,7 +54,7 @@ def handle_sign_up():
 
         return 'You login!'
     else:
-        return 'You no login!'
+        return render_template(r"new-user.html",mismatch=True)
 
 @app.route('/user/<email>/')
 def get_user(email):
