@@ -121,9 +121,9 @@ def get_payment_page():
             total = 0.00
             for item in order_items:
                 items.append(OrderItem(item.name, item.price, item.qty))
-                total = "{:10.2f}".format(float(item.price) * int(item.qty))
+                total = float(item.price) * int(item.qty)
             
-            return render_template(r"payment.html", items=items, total=total)
+            return render_template(r"payment.html", items=items, total="{:10.2f}".format(total))
         else:
             return redirect("/order/")
 
