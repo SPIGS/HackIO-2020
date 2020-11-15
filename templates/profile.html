@@ -1,6 +1,6 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/profile.css') }}" media="screen" />
         <title>Oasis</title>
     </head>
     <header>
@@ -12,6 +12,11 @@
                 <div class="name">
                     <h1 class="name">OASIS</h1>
                 </div>
+                <a href="../home" class="home">
+                    <div class="home_button">
+                        Home
+                    </div>
+                </a>
                 <a href="../order" class="order">
                     <div class="order_button">
                         Order
@@ -25,11 +30,6 @@
                 <a href="../payment" class="payment">
                     <div class="payment_button">
                         Payment
-                    </div>
-                </a>
-                <a href="../profile" class="profile">
-                    <div class="profile_button">
-                        Profile
                     </div>
                 </a>
             </div>

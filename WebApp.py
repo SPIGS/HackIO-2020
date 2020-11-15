@@ -86,6 +86,18 @@ def get_home_page():
 def get_order_page():
     return render_template(r"order.html", items=items)
 
+@app.route('/tracker/')
+def get_tracker_page():
+    return render_template(r"tracker.html")
+
+@app.route('/payment/')
+def get_payment_page():
+    return render_template(r"payment.html")
+
+@app.route('/profile/')
+def get_profile_page():
+    return render_template(r"profile.html")
+
 @app.route('/login/', methods=['POST'])
 def handle_login():
     user_email = request.form['email']

@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik:500');
+header {
+    width: 100%;
+    height: auto;
+    font-family: 'Rubik', sans-serif;
+    background-color: white;
+    margin: 1px;
+    padding: 10px;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    background: #CCD1D9;
+    overflow-x: hidden;
+}
+
+.logo {
+    display: inline-block;
+    vertical-align: middle;
+    width: 7%;
+}
+
+.logo-img {
+    width: 100%;
+}
+
+.nav {
+    display: inline-block;
+    vertical-align: middle;
+    width: 90%;
+}
+
+.nav_bar_links {
+    display: flex;
+}
+
+.name {
+    padding-left: 10px;
+    flex-grow: 1;
+}
+
+.order,
+.tracker,
+.home,
+.payment {
+    margin-right: auto;
+    margin-left: auto;
+    padding: 16px 42px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    line-height: 1.25;
+    background: #a19d84;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    align-self: center;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.order:hover,
+.tracker:hover,
+.payment:hover,
+.home:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
