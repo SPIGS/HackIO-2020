@@ -7,8 +7,8 @@ app = Flask(__name__)
 domain = '127.0.0.1'
 #domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5433/postgres'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -102,7 +102,7 @@ def handle_sign_up():
         res.set_cookie('UserLogin', str(user_id.id) + ':' + str(user_email), domain=domain, secure=True)
         return res
     else:
-        return render_template(r"new-user.html",mismatch=True)
+        return render_template(r"new-user.html", mismatch=True)
 
 @app.route('/user/<email>/')
 def get_user(email):
@@ -129,4 +129,5 @@ def check_password(hashed_password, user_password):
     return password + ':' + salt == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest() + ':' + salt
 
 if __name__ == '__main__':
+    db.create_all()
     app.run(port=5000, debug=True)
