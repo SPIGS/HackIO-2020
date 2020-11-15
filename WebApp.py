@@ -7,7 +7,7 @@ app = Flask(__name__)
 domain = '127.0.0.1'
 #domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 
@@ -37,6 +37,18 @@ class Item (db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     item_name = db.Column(db.String(50))
     qty = db.Column(db.Integer)
+
+class ListItem:
+    def __init__(self, name, stock, price):
+        self.name = name
+        self.stock =  stock
+        self.price = str(format(price,'.2f'))
+
+items = [ListItem('Apples', 1000, 1.00),
+        ListItem('Beef', 500, 3.00),
+        ListItem('Cat Food',130, 5.00),
+        ListItem('Deep Dish', 0, 10.00)]
+
 
 @app.route('/')
 def front():
@@ -72,7 +84,19 @@ def get_home_page():
 
 @app.route('/order/')
 def get_order_page():
-    return render_template(r"order.html")
+    return render_template(r"order.html", items=items)
+
+@app.route('/tracker/')
+def get_tracker_page():
+    return render_template(r"tracker.html")
+
+@app.route('/payment/')
+def get_payment_page():
+    return render_template(r"payment.html")
+
+@app.route('/profile/')
+def get_profile_page():
+    return render_template(r"profile.html")
 
 @app.route('/process-order/')
 def process-order():
@@ -85,10 +109,9 @@ def process-order():
 def handle_login():
     user_email = request.form['email']
     password_form = request.form['password']
-    user_auth = User_Auth.query.filter_by(email=user_email).first()
-    is_correct_password = check_password(user_auth.hashed_password, password_form)
+    user_auth = User_Auth.query.filter_by(email=user_email).first() 
     
-    if is_correct_password:
+    if user_auth != None and check_password(user_auth.hashed_password, password_form):
         user_data = User.query.filter_by(email=user_email).first()
         user_id = user_data.id
 
@@ -122,7 +145,7 @@ def handle_sign_up():
         res.set_cookie('UserLogin', str(user_id.id) + ':' + str(user_email), domain=domain, secure=True)
         return res
     else:
-        return render_template(r"new-user.html",mismatch=True)
+        return render_template(r"new-user.html", mismatch=True)
 
 @app.route('/user/<email>/')
 def get_user(email):
@@ -149,4 +172,5 @@ def check_password(hashed_password, user_password):
     return password + ':' + salt == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest() + ':' + salt
 
 if __name__ == '__main__':
+    db.create_all()
     app.run(port=5000, debug=True)
