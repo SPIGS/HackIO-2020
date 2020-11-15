@@ -11,6 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50))
@@ -60,6 +61,7 @@ items = [ListItem('Apples', 1000, 1.00),
 
 @app.route('/')
 def front():
+    db.create_all()
     return render_template(r"front.html")
 
 @app.route('/new-user/')
