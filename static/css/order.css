@@ -40,7 +40,7 @@ body {
     flex-grow: 1;
 }
 
-.order,
+.home,
 .tracker,
 .payment,
 .profile {
@@ -63,7 +63,7 @@ body {
     margin-left: 5px;
 }
 
-.order:hover,
+.home:hover,
 .tracker:hover,
 .payment:hover,
 .profile:hover {

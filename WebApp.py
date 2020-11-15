@@ -57,6 +57,10 @@ def get_home_page():
         res = make_response(redirect('/customer-login/'))
         return res
 
+@app.route('/order/')
+def get_order_page():
+    return render_template(r"order.html")
+
 @app.route('/login/', methods=['POST'])
 def handle_login():
     user_email = request.form['email']
