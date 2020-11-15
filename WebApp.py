@@ -7,8 +7,8 @@ app = Flask(__name__)
 domain = '127.0.0.1'
 #domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -77,8 +77,7 @@ def handle_login():
                        str(user_email), domain=domain, secure=True)
         return res
     else:
-        res = make_response('Incorrect password')
-        return res
+        return render_template(r"customer-login.html",invalid=True)
 
 @app.route('/sign-up/', methods=['POST'])
 def handle_sign_up():

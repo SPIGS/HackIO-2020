@@ -15,6 +15,9 @@
     <form action="/login/" method="POST">
         <div class="Wrapper">
             <div class="Input">
+                {% if invalid is defined %}
+                    <label for="email" class="conf-error">Invalid Email/Password</label>
+                {% endif %}
                 <input type="text" id="email" name="email" class="Input-text" placeholder="Enter your email" required>
                 <input type="password" id="password" name="password" class="Input-text" placeholder="Enter your password" required>
             </div>
