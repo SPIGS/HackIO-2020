@@ -99,7 +99,7 @@ def get_profile_page():
     return render_template(r"profile.html")
 
 @app.route('/process-order/')
-def process-order():
+def process_order():
     # treat list relationship as python list
     # a = Address(email='foo@bar.com')
     # p = Person(name='foo', addresses=[a])
