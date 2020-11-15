@@ -25,6 +25,19 @@ class User_Auth(db.Model):
     email = db.Column(db.String(50))
     hashed_password = db.Column(db.String(200)) #NOTE: THIS IS NOT SECURE!!!! THIS IS ONLY INTENDED FOR PROTOTYPING SINCE THIS IS A HACKATHON!!!!
 
+class Order (db.Model):
+    __tablename__ = 'order'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    zip_code = db.Column(db.Integer)
+    items = db.relationship('Item', backref='order')
+
+class Item (db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
+    item_name = db.Column(db.String(50))
+    qty = db.Column(db.Integer)
+
 @app.route('/')
 def front():
     return render_template(r"front.html")
