@@ -74,6 +74,13 @@ def get_home_page():
 def get_order_page():
     return render_template(r"order.html")
 
+@app.route('/process-order/')
+def process-order():
+    # treat list relationship as python list
+    # a = Address(email='foo@bar.com')
+    # p = Person(name='foo', addresses=[a])
+    return 'Order submitted!'
+
 @app.route('/login/', methods=['POST'])
 def handle_login():
     user_email = request.form['email']
