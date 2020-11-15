@@ -8,7 +8,7 @@ domain = '127.0.0.1'
 #domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5433/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -37,6 +37,18 @@ class Item (db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     item_name = db.Column(db.String(50))
     qty = db.Column(db.Integer)
+
+class ListItem:
+    def __init__(self, name, stock, price):
+        self.name = name
+        self.stock =  stock
+        self.price = str(format(price,'.2f'))
+
+items = [ListItem('Apples', 1000, 1.00),
+        ListItem('Beef', 500, 3.00),
+        ListItem('Cat Food',130, 5.00),
+        ListItem('Deep Dish', 0, 10.00)]
+
 
 @app.route('/')
 def front():
@@ -72,7 +84,7 @@ def get_home_page():
 
 @app.route('/order/')
 def get_order_page():
-    return render_template(r"order.html")
+    return render_template(r"order.html", items=items)
 
 @app.route('/login/', methods=['POST'])
 def handle_login():
