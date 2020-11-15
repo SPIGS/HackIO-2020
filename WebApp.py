@@ -13,6 +13,7 @@ db = SQLAlchemy(app)
 db.create_all()
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50))
     organizer = db.Column(db.Boolean)
@@ -22,6 +23,7 @@ class User(db.Model):
     zip_code = db.Column(db.Integer)
 
 class User_Auth(db.Model):
+    __tablename__ = 'user_auth'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50))
     hashed_password = db.Column(db.String(200)) #NOTE: THIS IS NOT SECURE!!!! THIS IS ONLY INTENDED FOR PROTOTYPING SINCE THIS IS A HACKATHON!!!!
@@ -35,6 +37,7 @@ class Order (db.Model):
     paid = db.Column(db.Boolean)
 
 class Item (db.Model):
+    __tablename__ = 'item'
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     name = db.Column(db.String(50))
