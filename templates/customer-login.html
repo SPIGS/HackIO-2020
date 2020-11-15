@@ -1,21 +1,28 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/new-user.css') }}" media="screen"/>
-        <title>New User</title>
-    </head>
-    <header class="brandheader"><h1>OASIS</h1></header>
-    <body>
-      <img src="{{ url_for('static', filename='res/logo.png') }}" alt="Oasis" class="center-small">
-      <form action="/login/" method="POST">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/new-user.css') }}" media="screen" />
+    <title>New User</title>
+</head>
+<header class="brandheader">
+    <h1>OASIS</h1>
+</header>
+
+<body>
+    <a href="../">
+        <img src="{{ url_for('static', filename='res/logo.png') }}" alt="Oasis" class="center-small">
+    </a>
+    <form action="/login/" method="POST">
         <div class="Wrapper">
-          <div class="Input">
-            <input type="text" id="email" name="email" class="Input-text" placeholder="Enter your email" required>
-            <input type="password" id="password" name="password" class="Input-text" placeholder="Enter your password" required>
-          </div>
+            <div class="Input">
+                <input type="text" id="email" name="email" class="Input-text" placeholder="Enter your email" required>
+                <input type="password" id="password" name="password" class="Input-text" placeholder="Enter your password" required>
+            </div>
         </div>
         <div class="submit">
-          <input type="submit" href="#" class="submit-button" value="Submit"></a>
+            <input type="submit" href="#" class="submit-button" value="Submit"></a>
         </div>
-      </form>
-    </body>
+    </form>
+</body>
+
 </html>
