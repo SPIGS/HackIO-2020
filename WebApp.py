@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 import os, hashlib, uuid
@@ -52,7 +52,7 @@ def handle_sign_up():
         db.session.add(user_auth)
         db.session.commit()
 
-        return 'You login!'
+        return redirect('/home/')
     else:
         return render_template(r"new-user.html",mismatch=True)
 
