@@ -1,17 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 import os, hashlib, uuid
 
 app = Flask(__name__)
+domain = '127.0.0.1'
+#domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-<<<<<<< Updated upstream
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5433/postgres'
-=======
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
->>>>>>> Stashed changes
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -46,23 +42,40 @@ def get_home_page():
 
 @app.route('/login/', methods=['POST'])
 def handle_login():
-    return request.form
+    user_email = request.form['email']
+    password_form = request.form['password']
+    user_auth = User_Auth.query.filter_by(email=user_email).first()
+    is_correct_password = check_password(user_auth.hashed_password, password_form)
+    if is_correct_password:
+        res = make_response('Correct password login should happen')
+        return res
+    else:
+        res = make_response('Incorrect password')
+        return res
 
 @app.route('/sign-up/', methods=['POST'])
 def handle_sign_up():
-    user = User(email=request.form['email'], organizer=False, admin=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
+    #write user info to database
+    user_email = request.form['email']
+    user = User(email=user_email, organizer=False, admin=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
     user_auth = User_Auth(email=request.form['email'], hashed_password=get_hashed_password(request.form['password']));
     db.session.add(user)
     db.session.add(user_auth)
     db.session.commit()
 
-    return 'You login in!'
+    #set login cookie
+    user_query = User.query.filter_by(email=user_email).first()
+    response = make_response(f'You login in!')
+    response.set_cookie('Login', str(user_query.id) + ':' +
+                        str(user_email), domain=domain, secure=True,)
+
+    return response
 
 @app.route('/user/<email>/')
 def get_user(email):
     user = User.query.filter_by(email=email).first()
-
-    return f'<ul><li>Email: { user.email }</li></ul>'
+    login = request.cookies.get('Login')
+    return f'<ul><li>Email: { login }</li></ul>'
 
 @app.errorhandler(505)
 def internal_error(error):
@@ -80,7 +93,7 @@ def get_hashed_password(password):
 '''Returns true if the provided hashed_password and user_password match'''
 def check_password(hashed_password, user_password):
     password, salt = hashed_password.split(':')
-    return password == hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
+    return password + ':' + salt == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest() + ':' + salt
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
