@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-import os
+import os, hashlib, uuid
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -45,6 +45,16 @@ def internal_error(error):
 @app.errorhandler(404)
 def not_found(error):
     return "404 error", 404
+
+'''Get's hashed password'''
+def get_hashed_password(password):
+    salt = uuid.uuid4().hex
+    return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
+
+'''Returns true if the provided hashed_password and user_password match'''
+def check_password(hashed_password, user_password):
+    password, salt = hashed_password.split(':')
+    return password == hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
