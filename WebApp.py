@@ -90,10 +90,9 @@ def get_order_page():
 def handle_login():
     user_email = request.form['email']
     password_form = request.form['password']
-    user_auth = User_Auth.query.filter_by(email=user_email).first()
-    is_correct_password = check_password(user_auth.hashed_password, password_form)
+    user_auth = User_Auth.query.filter_by(email=user_email).first() 
     
-    if is_correct_password:
+    if user_auth != None and check_password(user_auth.hashed_password, password_form):
         user_data = User.query.filter_by(email=user_email).first()
         user_id = user_data.id
 
