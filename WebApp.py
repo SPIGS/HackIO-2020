@@ -5,14 +5,15 @@ import os, hashlib, uuid
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5433/postgres'
 db = SQLAlchemy(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50))
-    organizer_status = db.Column(db.Boolean)
-    admin_status = db.Column(db.Boolean)
+    organizer = db.Column(db.Boolean)
+    admin = db.Column(db.Boolean)
     address = db.Column(db.String(100))
     state = db.Column(db.String(50))
     zip_code = db.Column(db.Integer)
@@ -20,7 +21,7 @@ class User(db.Model):
 class User_Auth(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50))
-    hashed_password = db.Column(db.Integer) #NOTE: THIS IS NOT SECURE!!!! THIS IS ONLY INTENDED FOR PROTOTYPING SINCE THIS IS A HACKATHON!!!!
+    hashed_password = db.Column(db.String(200)) #NOTE: THIS IS NOT SECURE!!!! THIS IS ONLY INTENDED FOR PROTOTYPING SINCE THIS IS A HACKATHON!!!!
 
 @app.route('/')
 def front():
@@ -40,9 +41,13 @@ def handle_login():
 
 @app.route('/sign-up/', methods=['POST'])
 def handle_sign_up():
-    user = User(email=request.form['email'], organizer_status=False, admin_status=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
+    user = User(email=request.form['email'], organizer=False, admin=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
+    user_auth = User_Auth(email=request.form['email'], hashed_password=get_hashed_password(request.form['password']));
     db.session.add(user)
+    db.session.add(user_auth)
     db.session.commit()
+
+    return 'You login in!'
 
 @app.route('/user/<email>/')
 def get_user(email):
