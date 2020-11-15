@@ -15,7 +15,7 @@ class User(db.Model):
     organizer_status = db.Column(db.Boolean)
     admin_status = db.Column(db.Boolean)
     address = db.Column(db.String(100))
-    city = db.Column(db.String(50))
+    state = db.Column(db.String(50))
     zip_code = db.Column(db.Integer)
 
 class User_Auth(db.Model):
@@ -38,6 +38,18 @@ def get_login_page():
 @app.route('/login/', methods=['POST'])
 def handle_login():
     return request.form
+
+@app.route('/sign-up/', methods=['POST'])
+def handle_sign_up():
+    user = User(email=request.form['email'], organizer_status=False, admin_status=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
+    db.session.add(user)
+    db.session.commit()
+
+@app.route('/user/<email>/')
+def get_user(email):
+    user = User.query.filter_by(email=email).first()
+
+    return f'<ul><li>Email: { user.email }</li></ul>'
 
 @app.errorhandler(505)
 def internal_error(error):
