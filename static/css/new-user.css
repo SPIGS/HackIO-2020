@@ -177,3 +177,8 @@ body {
     font-family: 'Rubik', sans-serif;
     font-size: var(--fontSizeMd);
 }
+
+.conf-error {
+    margin-top: 15px;
+    color: red;
+}

@@ -19,6 +19,9 @@
                 <input type="text" id="address" name="address" class="Input-text" placeholder="Enter your address" required>
                 <input type="text" id="state" name="state" class="Input-text" placeholder="Enter your state" required>
                 <input type="text" id="ZIP" name="ZIP" class="Input-text" placeholder="Enter your ZIP code" required>
+                {% if mismatch %}
+                    <label class="conf-error" for="password">Passwords need to match</label>
+                {% endif %}
                 <input type="password" id="password" name="password" class="Input-text" placeholder="Enter a new password" required>
                 <input type="password" id="confirmation" name="confirmation" class="Input-text" placeholder="Confirm your password" required>
             </div>

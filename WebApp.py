@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 import os, hashlib, uuid
@@ -7,7 +7,8 @@ app = Flask(__name__)
 domain = '127.0.0.1'
 #domain = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -30,7 +31,7 @@ def front():
 
 @app.route('/new-user/')
 def sign_up():
-    return render_template(r"new-user.html")
+    return render_template(r"new-user.html",mismatch=False)
 
 @app.route('/customer-login/')
 def get_login_page():
@@ -55,21 +56,16 @@ def handle_login():
 
 @app.route('/sign-up/', methods=['POST'])
 def handle_sign_up():
-    #write user info to database
-    user_email = request.form['email']
-    user = User(email=user_email, organizer=False, admin=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
-    user_auth = User_Auth(email=request.form['email'], hashed_password=get_hashed_password(request.form['password']));
-    db.session.add(user)
-    db.session.add(user_auth)
-    db.session.commit()
+    if request.form['password'] == request.form['confirmation']:
+        user = User(email=request.form['email'], organizer=False, admin=False, address=request.form['address'], state=request.form['state'], zip_code=request.form['ZIP'])
+        user_auth = User_Auth(email=request.form['email'], hashed_password=get_hashed_password(request.form['password']))
+        db.session.add(user)
+        db.session.add(user_auth)
+        db.session.commit()
 
-    #set login cookie
-    user_query = User.query.filter_by(email=user_email).first()
-    response = make_response(f'You login in!')
-    response.set_cookie('Login', str(user_query.id) + ':' +
-                        str(user_email), domain=domain, secure=True,)
-
-    return response
+        return redirect('/home/')
+    else:
+        return render_template(r"new-user.html",mismatch=True)
 
 @app.route('/user/<email>/')
 def get_user(email):
