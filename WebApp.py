@@ -64,6 +64,7 @@ items = [ListItem('Apples', 1000, 1.00),
 
 @app.route('/')
 def front():
+    db.create_all()
     return render_template(r"front.html")
 
 @app.route('/new-user/')
